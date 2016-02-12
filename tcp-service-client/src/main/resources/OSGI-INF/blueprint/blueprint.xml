@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+
+<bean id="fakeProcessor" class="mx.redhat.coppel.banco.fuse.poc.FakeProcess"/>
+<bean id="spf" class="mx.redhat.coppel.banco.fuse.poc.CoppelServerPipelineFactory"/>
+
+<!-- use the worker pool builder to create to help create the shared thread pool -->
+<bean id="poolBuilder" class="org.apache.camel.component.netty.NettyWorkerPoolBuilder">
+  <property name="workerCount" value="250"/>
+</bean>
+ 
+<!-- the shared worker thread pool -->
+<bean id="sharedPool" class="org.jboss.netty.channel.socket.nio.WorkerPool" factory-ref="poolBuilder" factory-method="build" destroy-method="shutdown"/>
+
+<camelContext xmlns="http://camel.apache.org/schema/blueprint">
+  <route id="bancoppel_fake">
+    <from uri="netty:tcp://0.0.0.0:22005?exchangePattern=InOut&amp;sync=true&amp;synchronous=true&amp;serverPipelineFactory=#spf&amp;workerPool=#sharedPool&amp;orderedThreadPoolExecutor=false"/>
+    <log message="The message contains ${body}"/>
+    <delay>
+      <constant>500</constant>
+      <log message="Going back after 500ms"/>
+      <process ref="fakeProcessor"/>
+      <to uri="mock:result"/>
+    </delay>
+  </route>
+</camelContext>
+
+</blueprint>
