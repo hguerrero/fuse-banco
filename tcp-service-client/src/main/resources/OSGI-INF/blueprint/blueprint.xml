@@ -17,7 +17,7 @@
 <bean id="sharedPool" class="org.jboss.netty.channel.socket.nio.WorkerPool" factory-ref="poolBuilder" factory-method="build" destroy-method="shutdown"/>
 
 <camelContext xmlns="http://camel.apache.org/schema/blueprint">
-  <route id="bancoppel_fake">
+  <route id="bancoppel_fake_send">
     <from uri="netty:tcp://0.0.0.0:22005?exchangePattern=InOut&amp;sync=true&amp;synchronous=true&amp;serverPipelineFactory=#spf&amp;workerPool=#sharedPool&amp;orderedThreadPoolExecutor=false"/>
     <log message="The message contains ${body}"/>
     <delay>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+
+<bean id="fakeProcessor" class="mx.redhat.coppel.banco.fuse.poc.FakeProcess"/>
+
+<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+  <property name="connectionFactory">
+    <bean class="org.apache.activemq.ActiveMQConnectionFactory">
+      <property name="brokerURL" value="tcp://192.168.122.177:61617"/>
+    </bean>
+  </property>
+</bean>
+
+
+<!-- use the worker pool builder to create to help create the shared thread pool -->
+<bean id="poolBuilder" class="org.apache.camel.component.netty.NettyWorkerPoolBuilder">
+  <property name="workerCount" value="250"/>
+</bean>
+ 
+<!-- the shared worker thread pool -->
+<bean id="sharedPool" class="org.jboss.netty.channel.socket.nio.WorkerPool" factory-ref="poolBuilder" factory-method="build" destroy-method="shutdown"/>
+
+<camelContext xmlns="http://camel.apache.org/schema/blueprint">
+  <route id="bancoppel_fake_reply">
+    <from uri="activemq:req?username=admin&amp;password=admin"/>
+    <process ref="fakeProcessor"/>
+    <to uri="mock:result"/>
+    <!-- 
+    <process ref="coppelDecryptProcessor"/>
+    <log message="xml peticion: ${body}"/>
+    <unmarshal ref="jaxbRequest"/>
+    <wireTap uri="file:///home/syspruebasbanco/request"/>
+    <marshal>
+      <bindy type="Csv" classType="mx.com.redhat.consulting.coppel.poc.messages.request.Mensaje90011Request"/>
+    </marshal>
+    <convertBodyTo type="java.lang.String"/>
+    <log message="despues del marshaling: ${body}"/>
+    <process ref="coppelCsvOutputRequestProcessor"/>
+    <process ref="coppelOutputProcessor"/>
+    <to uri="netty:tcp://0.0.0.0:22003?exchangePattern=InOut&amp;sync=true&amp;synchronous=true&amp;clientPipelineFactory=#cpf"/>
+    <process ref="coppelCsvInputResponseProcessor"/>
+    <log message="csv respuesta: ${body}"/>
+    <unmarshal>
+      <bindy type="Csv" classType="mx.com.redhat.consulting.coppel.poc.messages.response.Mensaje90011Response"/>
+    </unmarshal>
+    <marshal ref="jaxbResponse"/>
+    <log message="xml respuesta: ${body}"/>
+    <convertBodyTo type="java.lang.String"/>
+    <wireTap uri="file:///home/syspruebasbanco/response"/>
+    <process ref="coppelCryptProcessor"/>
+     -->
+  </route>
+</camelContext>
+
+</blueprint>
