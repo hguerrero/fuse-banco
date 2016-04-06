@@ -8,17 +8,9 @@
 <bean id="fakeProcessor" class="mx.redhat.coppel.banco.fuse.poc.FakeProcess"/>
 <bean id="spf" class="mx.redhat.coppel.banco.fuse.poc.CoppelServerPipelineFactory"/>
 
-<!-- use the worker pool builder to create to help create the shared thread pool -->
-<bean id="poolBuilder" class="org.apache.camel.component.netty.NettyWorkerPoolBuilder">
-  <property name="workerCount" value="250"/>
-</bean>
- 
-<!-- the shared worker thread pool -->
-<bean id="sharedPool" class="org.jboss.netty.channel.socket.nio.WorkerPool" factory-ref="poolBuilder" factory-method="build" destroy-method="shutdown"/>
-
 <camelContext xmlns="http://camel.apache.org/schema/blueprint">
   <route id="bancoppel_fake_send">
-    <from uri="netty:tcp://0.0.0.0:22005?exchangePattern=InOut&amp;sync=true&amp;synchronous=true&amp;serverPipelineFactory=#spf&amp;workerPool=#sharedPool&amp;orderedThreadPoolExecutor=false"/>
+    <from uri="netty4:tcp://0.0.0.0:22005?exchangePattern=InOut&amp;sync=true&amp;synchronous=true&amp;serverInitializerFactory=#spf&amp;textline=true"/>
     <log message="The message contains ${body}"/>
     <delay>
       <constant>500</constant>
