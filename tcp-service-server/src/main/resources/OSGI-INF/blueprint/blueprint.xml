@@ -10,7 +10,7 @@
 <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
   <property name="connectionFactory">
     <bean class="org.apache.activemq.ActiveMQConnectionFactory">
-      <property name="brokerURL" value="tcp://192.168.122.177:61617"/>
+      <property name="brokerURL" value="tcp://amq01.lab.mx.redhat.com:61616?jms.prefetchPolicy.all=1"/>
     </bean>
   </property>
 </bean>
@@ -26,7 +26,7 @@
 
 <camelContext xmlns="http://camel.apache.org/schema/blueprint">
   <route id="bancoppel_fake_reply">
-    <from uri="activemq:req?username=admin&amp;password=admin"/>
+    <from uri="activemq:req?concurrentConsumers=250&amp;asyncConsumer=true&amp;username=admin&amp;password=admin"/>
     <process ref="fakeProcessor"/>
     <to uri="mock:result"/>
     <!-- 
