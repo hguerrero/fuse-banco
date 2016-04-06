@@ -50,22 +50,31 @@ public class CoppelServerHandler extends ServerChannelHandler
 		{
 			int sizeAknowledge = in.readInt();
 			
-			LOG.info("Acuse recibido: " + reverseInteger(sizeAknowledge));
-			LOG.info("Longitud de la cadena: " + message.length());
+			if (LOG.isTraceEnabled()) 
+			{
+				LOG.trace("Acuse recibido: " + reverseInteger(sizeAknowledge));
+				LOG.trace("Longitud de la cadena: " + message.length());
+            }
 			
 			if(message.length() > 0) 
 			{
 				int tamanoPackage = PACKAGE_SIZE;
 				if(message.length() < PACKAGE_SIZE) {
 					tamanoPackage = message.length();
-					LOG.info("El tamano del buffer es menor al predeterminado: " + tamanoPackage);
+					if (LOG.isDebugEnabled()) 
+	                {
+						LOG.debug("El tamano del buffer es menor al predeterminado: " + tamanoPackage);
+	                }
 				}
 				
 				String bodyPackage = message.toString().substring(0, tamanoPackage);
 				
 				message.delete(0, tamanoPackage);
 				
-				LOG.info("Paquetes " + countPackages + " size: " + tamanoPackage + " body: " + bodyPackage);
+				if (LOG.isTraceEnabled()) 
+                {
+					LOG.trace("Paquetes " + countPackages + " size: " + tamanoPackage + " body: " + bodyPackage);
+                }
 				
 				ByteBuf out = Unpooled.buffer(4 + tamanoPackage);
 				out.writeInt(reverseInteger(tamanoPackage));
@@ -92,7 +101,10 @@ public class CoppelServerHandler extends ServerChannelHandler
 			
 			totalSize = reverseInteger(totalSizeReversed);
 			
-			LOG.info("Total Size received: " + totalSize);
+			if (LOG.isTraceEnabled()) 
+            {
+				LOG.trace("Total Size received: " + totalSize);
+            }
 			
 			handShakeFlag = true;
 			
@@ -101,22 +113,33 @@ public class CoppelServerHandler extends ServerChannelHandler
 			
 			ctx.channel().writeAndFlush(out);
 			
-			LOG.info("End of handshake");
+			if (LOG.isTraceEnabled()) 
+            {
+				LOG.trace("End of handshake");
+            }
 			
 			return;
 		}
 		
-		LOG.info("Data Read");
+		if (LOG.isTraceEnabled()) 
+        {
+			LOG.trace("Data Read");
+        }
 		
 		packageSizeReversed = in.readInt();
 		
-		LOG.info("PackageR " + countPackages + " size: " + reverseInteger(packageSizeReversed));
-
-		LOG.info("Entrando para obtener el body del paquete");
+		if (LOG.isTraceEnabled()) 
+        {
+			LOG.trace("PackageR " + countPackages + " size: " + reverseInteger(packageSizeReversed));
+			LOG.trace("Entrando para obtener el body del paquete");
+        }
 		
 		String bodyPackage = new String(in.readBytes(reverseInteger(packageSizeReversed)).array());
 		
-		LOG.info("PackageR " + countPackages + " size: " + reverseInteger(packageSizeReversed) + "; body: " + bodyPackage);
+		if (LOG.isDebugEnabled()) 
+        {
+			LOG.debug("PackageR " + countPackages + " size: " + reverseInteger(packageSizeReversed) + "; body: " + bodyPackage);
+        }
 		
 		message.append(bodyPackage);
 		
@@ -181,7 +204,10 @@ public class CoppelServerHandler extends ServerChannelHandler
 	
 	private void sendResponse(Object msg, ChannelHandlerContext ctx, Exchange exchange) throws Exception 
 	{
-        LOG.info("Aqui debemos enviar la respuesta");
+		if (LOG.isTraceEnabled()) 
+        {
+			LOG.trace("Aqui debemos enviar la respuesta");
+        }
     	
         Object body = getResponseBody(exchange);
         
@@ -234,7 +260,10 @@ public class CoppelServerHandler extends ServerChannelHandler
 	{
         String respuesta = exchange.getOut().getBody(String.class);
     	
-        LOG.info("Lo que voy a enviar: " + respuesta);
+        if (LOG.isDebugEnabled()) 
+        {
+        	LOG.debug("Lo que voy a enviar: " + respuesta);
+        }
         
         return respuesta;
 	}
