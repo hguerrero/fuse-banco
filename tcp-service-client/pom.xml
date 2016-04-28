@@ -18,7 +18,7 @@
     <jboss.fuse.bom.version>6.2.1.redhat-084</jboss.fuse.bom.version>
 
     <!-- Fabric8 configuration -->
-    <fabric8.profile>banco-cliente</fabric8.profile>
+    <fabric8.profile>bank-client</fabric8.profile>
     <fabric8.features>camel-netty4 camel-amq</fabric8.features>
     <fabric8.parentProfiles>feature-camel</fabric8.parentProfiles>
     <fabric8.jolokiaUrl>http://10.44.172.178:8181/jolokia</fabric8.jolokiaUrl>

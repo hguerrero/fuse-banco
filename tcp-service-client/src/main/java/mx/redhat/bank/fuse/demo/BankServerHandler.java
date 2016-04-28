@@ -1,4 +1,4 @@
-package mx.redhat.coppel.banco.fuse.poc;
+package mx.redhat.bank.fuse.demo;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
@@ -14,7 +14,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 
-public class CoppelServerHandler extends ServerChannelHandler 
+public class BankServerHandler extends ServerChannelHandler 
 {
 	private static final Logger LOG = LoggerFactory.getLogger(NettyConsumer.class);
 	
@@ -30,7 +30,7 @@ public class CoppelServerHandler extends ServerChannelHandler
 	
 	private final int PACKAGE_SIZE = 196;
 	
-	public CoppelServerHandler(NettyConsumer consumer) 
+	public BankServerHandler(NettyConsumer consumer) 
 	{
 		super(consumer);
 		cons = consumer;

@@ -5,8 +5,8 @@
        http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
        http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
 
-<bean id="fakeProcessor" class="mx.redhat.coppel.banco.fuse.poc.FakeProcess"/>
-<bean id="spf" class="mx.redhat.coppel.banco.fuse.poc.CoppelServerPipelineFactory"/>
+<bean id="fakeProcessor" class="mx.redhat.coppel.bank.fuse.poc.FakeProcess"/>
+<bean id="spf" class="mx.redhat.bank.fuse.demo.BankServerPipelineFactory"/>
 
 <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
   <property name="connectionFactory">
@@ -17,7 +17,7 @@
 </bean>
 
 <camelContext xmlns="http://camel.apache.org/schema/blueprint">
-  <route id="bancoppel_fake_send">
+  <route id="banco_fake_send">
     <from uri="netty4:tcp://0.0.0.0:22005?exchangePattern=InOut&amp;sync=true&amp;synchronous=true&amp;serverInitializerFactory=#spf&amp;textline=true&amp;workerCount=250"/>
     <log message="The message contains ${body}"/>
     <to uri="activemq:req?username=admin&amp;password=admin"/>

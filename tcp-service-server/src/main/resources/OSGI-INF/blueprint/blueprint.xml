@@ -5,7 +5,7 @@
        http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
        http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
 
-<bean id="fakeProcessor" class="mx.redhat.coppel.banco.fuse.poc.FakeProcess"/>
+<bean id="fakeProcessor" class="mx.redhat.bank.fuse.demo.FakeProcess"/>
 
 <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
   <property name="connectionFactory">
@@ -25,12 +25,12 @@
 <bean id="sharedPool" class="org.jboss.netty.channel.socket.nio.WorkerPool" factory-ref="poolBuilder" factory-method="build" destroy-method="shutdown"/>
 
 <camelContext xmlns="http://camel.apache.org/schema/blueprint">
-  <route id="bancoppel_fake_reply">
+  <route id="bank_fake_reply">
     <from uri="activemq:req?concurrentConsumers=250&amp;asyncConsumer=true&amp;username=admin&amp;password=admin"/>
     <process ref="fakeProcessor"/>
     <to uri="mock:result"/>
     <!-- 
-    <process ref="coppelDecryptProcessor"/>
+    <process ref="bankDecryptProcessor"/>
     <log message="xml peticion: ${body}"/>
     <unmarshal ref="jaxbRequest"/>
     <wireTap uri="file:///home/syspruebasbanco/request"/>
