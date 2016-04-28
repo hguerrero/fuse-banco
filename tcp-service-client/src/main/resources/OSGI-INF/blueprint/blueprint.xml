@@ -5,7 +5,7 @@
        http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
        http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
 
-<bean id="fakeProcessor" class="mx.redhat.coppel.bank.fuse.poc.FakeProcess"/>
+<bean id="fakeProcessor" class="mx.redhat.bank.fuse.demo.FakeProcess"/>
 <bean id="spf" class="mx.redhat.bank.fuse.demo.BankServerPipelineFactory"/>
 
 <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
