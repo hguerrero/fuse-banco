@@ -12,10 +12,10 @@ public class FakeProcess implements Processor
 	@Override
 	public void process(Exchange exchange) throws Exception 
 	{
-		LOG.info("Recibi el exchange");
+		LOG.debug("Recibi el exchange");
 		Object buffer = (Object) exchange.getIn().getBody();
 		String mensaje = new String(buffer.toString());
-		LOG.info("Body=" + mensaje);
+		LOG.debug("Body=" + mensaje);
 		exchange.getOut().setBody("2|PEREZ|LOPEZ|JUAN CARLOS|19750105|4|CULIACAN|CULIACAN|86|MORELOS|LAZARO CARDENAS|1696|18889999|S|0|0|0|0|0|0|0|0|/ESQ. RIO TEHUANTEPEC|7140397|6674742024|0|0|80170|433|#");
 	}
 
